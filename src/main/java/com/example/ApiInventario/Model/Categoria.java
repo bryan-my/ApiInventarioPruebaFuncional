@@ -3,6 +3,7 @@ package com.example.ApiInventario.Model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,6 +40,7 @@ public class Categoria
 
 
      @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Ignora completamente esta propiedad al serializar
     private List<Producto> productos;
 
 }

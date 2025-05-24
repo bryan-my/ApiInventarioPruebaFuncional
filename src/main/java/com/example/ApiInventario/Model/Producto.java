@@ -2,6 +2,8 @@ package com.example.ApiInventario.Model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,6 +41,7 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @JsonIgnoreProperties("productos") // Esta anotación evita la recursión
     private Categoria categoria;
 
 
