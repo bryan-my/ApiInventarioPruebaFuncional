@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ApiInventario.Model.Producto;
+import com.example.ApiInventario.Repository.CategoriaRepository;
+import com.example.ApiInventario.Repository.ProductoRepository;
 import com.example.ApiInventario.Service.ProductoService;
 
 import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequestMapping("api/productos")
+@RequestMapping("api/producto")
 @RequiredArgsConstructor
 public class ProductoController {
 

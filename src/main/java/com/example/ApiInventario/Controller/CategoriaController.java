@@ -18,16 +18,17 @@ import com.example.ApiInventario.Model.Categoria;
 import com.example.ApiInventario.Service.CategoriaService;
 
 @RestController
-@RequestMapping("api/categorias")
+@RequestMapping("api/categoria")
 public class CategoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
 
-    public List<Categoria> getAll(){
-        return categoriaService.getAll();
+   // GET: obtener todas categorias
+    @GetMapping
+    public ResponseEntity<List<Categoria>> getAll() {
+        return ResponseEntity.ok(categoriaService.getAll());
     }
-
     // Obtener categoria por ID (GET)
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer categoria_id) {
@@ -39,13 +40,13 @@ public class CategoriaController {
         }
     }
 
+
      // Crear nueva persona (POST)
     @PostMapping
     public ResponseEntity<?> add(@RequestBody Categoria categoria) {
         Categoria nueva = categoriaService.add(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
-    }
-
+    } 
      @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer categoria_id,@RequestBody Categoria categoria){
         Categoria actualizada = categoriaService.update(categoria_id, categoria);
