@@ -3,6 +3,7 @@ package com.example.ApiInventario.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 import com.example.ApiInventario.Model.Categoria;
 import com.example.ApiInventario.Service.CategoriaService;
@@ -67,5 +71,37 @@ public class CategoriaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Persona no encontrada");
         }
     }
+
+    //METODOS HATEOAS
+
+    //METODO HATEOAS para buscar por ID
+    @GetMapping("/hateoas/{id}")
+    public Categoria obtenerHATEOAS(@PathVariable Integer categoria_id) {
+        Categoria cat = categoriaService.getById(categoria_id);
+        
+        //link HATEOAS para API Gateway "A mano"
+        cat.add(Link.of("http://localhost:8888/api/proxy/productos/" + cat.getCategoria_id()).withSelfRel());
+        cat.add(Link.of("http://localhost:8888/api/proxy/productos/" + cat.getCategoria_id()).withRel("Modificar HATEOAS").withType("PUT"));
+        cat.add(Link.of("http://localhost:8888/api/proxy/productos/" + cat.getCategoria_id()).withRel("Eliminar HATEOAS").withType("DELETE"));
+
+        return cat;
+    }
+
+    //METODO HATEOAS para listar todos los productos utilizando HATEOAS
+    @GetMapping("/hateoas")
+    public List<Categoria> obtenerTodosHATEOAS() {
+        List<Categoria> lista = categoriaService.getAll();
+
+        for (Categoria cat : lista) {
+
+            //link HATEOAS para API Gateway "A mano"
+            cat.add(Link.of("http://localhost:8888/api/proxy/productos").withRel("Get todos HATEOAS"));
+            cat.add(Link.of("http://localhost:8888/api/proxy/productos/" + cat.getCategoria_id()).withRel("Crear HATEOAS").withType("POST"));
+        }
+
+        return lista;
+    }
+
+
 
 }
